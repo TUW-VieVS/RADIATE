@@ -1,0 +1,1 @@
+/data/INTERNAL/station_coord_files//gridpoint_coord_5x5.txt
