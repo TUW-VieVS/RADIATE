@@ -97,6 +97,9 @@
 ! 05.02.2018: epolog % raytrace is not globally stored anymore because it requires huge disk space and is not
 !             needed outside of the get_RayTrace2D_* subroutines
 !
+! Changes by Janina Boisits:
+! 27.02.2018: add input parameter 'wavelength' for "call get_meteo_undulation_refr_glob"
+!
 !****************************************************************************
     
     
@@ -736,7 +739,8 @@ subroutine RayTrace_main_global( parameters )
                                              parameters % interpolation_method, &
                                              epolog(curr_epolog_ind) % observing_stations % suspend_raytr, &
                                              epolog(curr_epolog_ind) % profile, &
-                                             epolog(curr_epolog_ind) % epoch )
+                                             epolog(curr_epolog_ind) % epoch, &
+                                             parameters % wavelength )
         
         ! report elapsed time
         call get_elapsed_time( icount_start, count_rate, icount_interm, elapsed_time )

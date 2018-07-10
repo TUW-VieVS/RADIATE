@@ -17,8 +17,8 @@
 ! INPUT:
 !       input_path_grib......... path to the grib-file
 !       input_gribfilename...... filename of the grib-file
-!       POIs_lat................ vector of ellips. latitudes of POIs in [¬∞], interval [-90¬∞,90¬∞]
-!       POIs_lon................ vector of ellips. longitudes of POIs in [¬∞], interval [0¬∞,360¬∞[
+!       POIs_lat................ vector of ellips. latitudes of POIs in [∞], interval [-90∞,90∞]
+!       POIs_lon................ vector of ellips. longitudes of POIs in [∞], interval [0∞,360∞[
 !       POIs_h_ell.............. vector of ellips. heigths of POIs in [m]
 !       POIs_name............... vector of names of POIs (station name)
 !       input_path_undulation... path to the directory with the global geoid undulation files with
@@ -28,6 +28,7 @@
 !                                supported by the grid or has not been found in the catalogue
 !                                .FALSE. ... ray-tracing will be done for this specific station
 !                                .TRUE. ... ray-tracing will be suspended for this specific station
+!       wavelength.............. wavelength range of observations (microwave or optical)
 ! 
 ! 
 ! OUTPUT:
@@ -83,9 +84,15 @@
 ! 14.01.2016: catch problem for vertical interpolation in case of no found station data for any observing station in the current
 !             epolog,
 !             avoid unnecessary calculations of ind_NPOI a further checks of valid station coordinates in case of stations with suspend_raytr == .TRUE.
-!
+!   
 ! Changes by Daniel Landskron:
-! 05.02.2018: for Q, not only negative values are corrected but also those below 8*10‚Åª7
+! 05.02.2018: for Q, not only negative values are corrected but also those below 8*10^-7
+!
+! Changes by Janina Boisits:
+! 27.02.2018: add input parameter 'wavelength',
+!             add "module_gridwise_refrHD_optical_ECMWFmin" and "module_profilewise_refrHD_optical_ECMWFmin" to used modules,
+!             add case selection when calling modules for computing refractivity (module_gridwise_refrHD_ECMWFmin/module_profilewise_refrHD_ECMWFmin or
+!             module_gridwise_refrHD_optical_ECMWFmin/module_profilewise_refrHD_optical_ECMWFmin)
 !
 !****************************************************************************
 
@@ -103,7 +110,8 @@ contains
                                                interpolation_method, &
                                                suspend_raytr, &
                                                profile, &
-                                               epoch )
+                                               epoch, & 
+                                               wavelength )
     
                                                  
         ! Define modules to be used
@@ -115,6 +123,8 @@ contains
         use module_date2mjd
         use module_gridwise_refrHD_ECMWFmin
         use module_profilewise_refrHD_ECMWFmin
+        use module_gridwise_refrHD_optical_ECMWFmin
+        use module_profilewise_refrHD_optical_ECMWFmin
         use module_calc_refr_ind_at_stations
     
         !----------------------------------------------------------------------------
@@ -155,6 +165,9 @@ contains
     
         ! variable for input of vertical interpolation method
         character(len=*), intent(in) :: interpolation_method
+    
+        ! variable for input of wavelength of observations
+        character(len=*), intent(in) :: wavelength
     
     
         ! INPUT and OUTPUT
@@ -306,22 +319,22 @@ contains
         nlon= gribdata % nlon
         
         ! latitude of first grid point
-        lat_first= gribdata % lat_first ! possible values [90¬∞,-90¬∞]; first means max. latitude
+        lat_first= gribdata % lat_first ! possible values [90∞,-90∞]; first means max. latitude
     
         ! latitude of last grid point
-        lat_last= gribdata % lat_last ! possible values [90¬∞,-90¬∞]; last means min. latitude
+        lat_last= gribdata % lat_last ! possible values [90∞,-90∞]; last means min. latitude
     
         ! longitude of first grid point
-        lon_first= gribdata % lon_first ! possible values [0¬∞,360¬∞[; first means min. longitude
+        lon_first= gribdata % lon_first ! possible values [0∞,360∞[; first means min. longitude
     
         ! longitude of last grid point
-        lon_last= gribdata % lon_last ! possible values [0¬∞,360¬∞[; last means max. longitude
+        lon_last= gribdata % lon_last ! possible values [0∞,360∞[; last means max. longitude
     
         ! grid intervall for latitude
-        dint_lat = gribdata % dint_lat ! in [¬∞]
+        dint_lat = gribdata % dint_lat ! in [∞]
     
         ! grid intervall for longitude
-        dint_lon = gribdata % dint_lon ! in [¬∞]
+        dint_lon = gribdata % dint_lon ! in [∞]
     
         ! report grib-file resolution
         ! note: fmt: ss --> no plus sign, f5.3 --> form x.yyy, 1 leading zero in case of shorter value
@@ -329,8 +342,8 @@ contains
     
         ! check if the input grid is a global grid and starting with the desired values in latitude and
         ! longitude
-        ! starting point of the grid must be 90¬∞ latitude and 0¬∞ longitude in order to apply undulations
-        ! correctly in a later processing step (undulations start at 90¬∞ latitude and 0¬∞ longitude)
+        ! starting point of the grid must be 90∞ latitude and 0∞ longitude in order to apply undulations
+        ! correctly in a later processing step (undulations start at 90∞ latitude and 0∞ longitude)
     
         ! set reference starting values for latitude and longitude used in the check
         reference_start_lat=90
@@ -356,7 +369,7 @@ contains
         if (.NOT. profile % grid % start_and_global_check) then
             ! report error in case that grib-file is not global or starting with wrong latitude or longitude
             write(unit= *, fmt= '(3a)') 'Error: Grib-file "', input_gribfilename, &
-                                        '" does not deliver data for global coverage or grid boundaries are shifted to other values than 0¬∞ in longitude and 90¬∞ in latitude. Thus program is stopped (undulations can not be assigned correctly and other problems would occur)!'
+                                        '" does not deliver data for global coverage or grid boundaries are shifted to other values than 0∞ in longitude and 90∞ in latitude. Thus program is stopped (undulations can not be assigned correctly and other problems would occur)!'
             ! stop the program
             stop
         end if
@@ -369,11 +382,11 @@ contains
     
         ! create latitude vector using implied do loop
         ! note: loop index must start at 0 and end at nlat-1 to get vector from lat_first to lat_last
-        vlat= [(lat_first + i*(-dint_lat), i= 0, nlat-1)] ! in [¬∞], -dint_lat, because latitude is decreasing from first latitude entry per convention of grib-file, note: third value in implied loop would be the stride and is default set to 1
+        vlat= [(lat_first + i*(-dint_lat), i= 0, nlat-1)] ! in [∞], -dint_lat, because latitude is decreasing from first latitude entry per convention of grib-file, note: third value in implied loop would be the stride and is default set to 1
     
         ! create longitude vector using implied do loop
         ! note: loop index must start at 0 and end at nlon-1 to get vector from lon_first to lon_last
-        vlon= [(lon_first + i*dint_lon, i= 0, nlon-1)] ! in [¬∞], note: third value in implied loop would be the stride and is default set to 1
+        vlon= [(lon_first + i*dint_lon, i= 0, nlon-1)] ! in [∞], note: third value in implied loop would be the stride and is default set to 1
     
         ! allocate variables for storing the grids
         allocate(profile % grid % grid_lat(nlat, nlon), profile % grid % grid_lon(nlat, nlon))
@@ -408,10 +421,9 @@ contains
                   profile % meteo % p(nr_pres_lev) )
         
         ! Q-values:
-        ! catch humidity values below 8*10‚Åª7 and set them to 8*10‚Åª7 
-        ! note: It is possible that this has already been done during the grib-data textfile creation, but it is better to check it here again.
+        ! catch values below 8*10^-7 and set them to 8*10^-7
         where (gribdata % Q < 8.0d-007)
-                gribdata % Q = 8.0d-007
+            gribdata % Q = 8.0d-007
         end where
     
         ! allocate temporal variable
@@ -703,49 +715,104 @@ contains
         select case (interpolation_method)
             ! case of profilewise interpolation approach
             case ('profilewise')
-                ! call subroutine for profilewise interpolation
-                call profilewise_refrHD_ECMWFmin( min_stat_h, &
-                                                  profile % grid % grid_lat, &
-                                                  profile % grid % grid_size, &
-                                                  nr_pres_lev, &
-                                                  profile % meteo % gph, &
-                                                  profile % meteo % p, &
-                                                  profile % meteo % wvpr, &
-                                                  profile % meteo % T, &
-                                                  profile % undulation_grid, &
-                                                  profile % meteo_int % h, &
-                                                  profile % meteo_int % nr_h_lev, &
-                                                  profile % meteo_int % upper_limit_ECMWF, &
-                                                  profile % meteo_int % upper_limit_atm, &
-                                                  profile % meteo_int % p, &
-                                                  profile % meteo_int % T, &
-                                                  profile % meteo_int % wvpr, &
-                                                  profile % meteo_int % n_h, &
-                                                  profile % meteo_int % n_w, &
-                                                  profile % meteo_int % n_total )
+                ! determine wavelength range of observations
+                select case (wavelength)
+                    ! case of microwave observations
+                    case ('microwave')
+                        ! call subroutine for profilewise interpolation (microwave)
+                        call profilewise_refrHD_ECMWFmin( min_stat_h, &
+                                                          profile % grid % grid_lat, &
+                                                          profile % grid % grid_size, &
+                                                          nr_pres_lev, &
+                                                          profile % meteo % gph, &
+                                                          profile % meteo % p, &
+                                                          profile % meteo % wvpr, &
+                                                          profile % meteo % T, &
+                                                          profile % undulation_grid, &
+                                                          profile % meteo_int % h, &
+                                                          profile % meteo_int % nr_h_lev, &
+                                                          profile % meteo_int % upper_limit_ECMWF, &
+                                                          profile % meteo_int % upper_limit_atm, &
+                                                          profile % meteo_int % p, &
+                                                          profile % meteo_int % T, &
+                                                          profile % meteo_int % wvpr, &
+                                                          profile % meteo_int % n_h, &
+                                                          profile % meteo_int % n_w, &
+                                                          profile % meteo_int % n_total )
+                    ! case of optical observations
+                    case ('optical')
+                        ! call subroutine for profilewise interpolation (optical)
+                        call profilewise_refrHD_optical_ECMWFmin( min_stat_h, &
+                                                                  profile % grid % grid_lat, &
+                                                                  profile % grid % grid_size, &
+                                                                  nr_pres_lev, &
+                                                                  profile % meteo % gph, &
+                                                                  profile % meteo % p, &
+                                                                  profile % meteo % wvpr, &
+                                                                  profile % meteo % T, &
+                                                                  profile % undulation_grid, &
+                                                                  profile % meteo_int % h, &
+                                                                  profile % meteo_int % nr_h_lev, &
+                                                                  profile % meteo_int % upper_limit_ECMWF, &
+                                                                  profile % meteo_int % upper_limit_atm, &
+                                                                  profile % meteo_int % p, &
+                                                                  profile % meteo_int % T, &
+                                                                  profile % meteo_int % wvpr, &
+                                                                  profile % meteo_int % n_h, &
+                                                                  profile % meteo_int % n_w, &
+                                                                  profile % meteo_int % n_total )
+                end select
+
     
             ! case of gridwise interpolation approach
             case ('gridwise')
-                ! call subroutine for gridwise interpolation
-                call gridwise_refrHD_ECMWFmin( min_stat_h, &
-                                               profile % grid % grid_lat, &
-                                               profile % grid % grid_size, &
-                                               nr_pres_lev, &
-                                               profile % meteo % gph, &
-                                               profile % meteo % p, &
-                                               profile % meteo % wvpr, &
-                                               profile % meteo % T, &
-                                               profile % undulation_grid, &
-                                               profile % meteo_int % h, &
-                                               profile % meteo_int % nr_h_lev, &
-                                               profile % meteo_int % upper_limit_ECMWF, &
-                                               profile % meteo_int % upper_limit_atm, &
-                                               profile % meteo_int % p, &
-                                               profile % meteo_int % T, &
-                                               profile % meteo_int % wvpr, &
-                                               profile % meteo_int % n_h, &
-                                               profile % meteo_int % n_w, &
-                                               profile % meteo_int % n_total )
+                ! determine wavelength range of observations
+                select case (wavelength)
+                    ! case of microwave observations
+                    case ('microwave')
+                        ! call subroutine for gridwise interpolation (microwave)
+                        call gridwise_refrHD_ECMWFmin( min_stat_h, &
+                                                       profile % grid % grid_lat, &
+                                                       profile % grid % grid_size, &
+                                                       nr_pres_lev, &
+                                                       profile % meteo % gph, &
+                                                       profile % meteo % p, &
+                                                       profile % meteo % wvpr, &
+                                                       profile % meteo % T, &
+                                                       profile % undulation_grid, &
+                                                       profile % meteo_int % h, &
+                                                       profile % meteo_int % nr_h_lev, &
+                                                       profile % meteo_int % upper_limit_ECMWF, &
+                                                       profile % meteo_int % upper_limit_atm, &
+                                                       profile % meteo_int % p, &
+                                                       profile % meteo_int % T, &
+                                                       profile % meteo_int % wvpr, &
+                                                       profile % meteo_int % n_h, &
+                                                       profile % meteo_int % n_w, &
+                                                       profile % meteo_int % n_total )
+                    ! case of optical observations
+                    case ('optical')
+                        ! call subroutine for gridwise interpolation (optical)
+                        call gridwise_refrHD_optical_ECMWFmin( min_stat_h, &
+                                                               profile % grid % grid_lat, &
+                                                               profile % grid % grid_size, &
+                                                               nr_pres_lev, &
+                                                               profile % meteo % gph, &
+                                                               profile % meteo % p, &
+                                                               profile % meteo % wvpr, &
+                                                               profile % meteo % T, &
+                                                               profile % undulation_grid, &
+                                                               profile % meteo_int % h, &
+                                                               profile % meteo_int % nr_h_lev, &
+                                                               profile % meteo_int % upper_limit_ECMWF, &
+                                                               profile % meteo_int % upper_limit_atm, &
+                                                               profile % meteo_int % p, &
+                                                               profile % meteo_int % T, &
+                                                               profile % meteo_int % wvpr, &
+                                                               profile % meteo_int % n_h, &
+                                                               profile % meteo_int % n_w, &
+                                                               profile % meteo_int % n_total )
+                end select
             
             ! case if other cases fail
             case default
