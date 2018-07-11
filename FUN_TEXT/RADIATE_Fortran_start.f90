@@ -9,8 +9,10 @@
 ! PROGRAM: RADIATE_Fortran_start
 !
 ! PURPOSE:  Entry point for the console application.
-!
+!   
 !           Ray-tracing program for one input AZEL-file (one session)
+!
+!               
 !
 !
 ! CALL: .exe with command line parameters:
@@ -51,6 +53,10 @@
 
 ! Changes by Daniel Landskron:
 ! 19.11.2017: also enabled for individual internal creation of uniform azel-files by adding a 9th input argument
+!
+!Changes by Janina Boisits:
+! 26.02.2018: add option 'microwave' or 'optical' to parameters
+! 08.03.2018: add option 'wavelength' to info message
 !
 !****************************************************************************
 
@@ -178,6 +184,10 @@ program RADIATE_Fortran_start
         ! .FALSE. ... a uniform azel file is created for individual settings stored in INPUT/AZEL_spec.txt
         parameters % readAzel= .TRUE.
     
+        ! set default wavelength range
+        ! options: 'microwave': description: refractivity field computed for microwave observations
+        !          'optical': description: refractivity field computed for optical observations
+        parameters % wavelength= 'microwave'
     
         !***************************************************************************************************
         !***************************************************************************************************
@@ -311,6 +321,21 @@ program RADIATE_Fortran_start
                         parameters % readAzel= .FALSE.
                     
                     !----------------------------------------------------------
+                                        
+                    ! possible cases for wavelength range of observations
+                    ! options: '-microwave', '-optical'
+                    
+                    ! case of "microwave"
+                    case ('-microwave')
+                        ! set mode for computing refractivity field for microwave observations
+                        parameters % wavelength= 'microwave'
+                        
+                    ! case of "optical"
+                    case ('-optical')
+                        ! set mode for computing refractivity field for optical observations
+                        parameters % wavelength= 'optical'
+                    
+                    !----------------------------------------------------------
                     
                     ! case of unknown argument
                     case default ! case if other cases fail
@@ -361,6 +386,10 @@ program RADIATE_Fortran_start
                 write(unit= *, fmt= '(/, tr4, a)') 'Options for time interpolation mode = mode of assigning the observations to epochs:'
                 write(unit= *, fmt= '(tr8, a)') 'a) "-one_epoch_per_obs"'
                 write(unit= *, fmt= '(tr8, a)') 'b) "-two_epochs_per_obs" (Default)'
+                        
+                write(unit= *, fmt= '(/, tr4, a)') 'Options for wavelength range of observations:'
+                write(unit= *, fmt= '(tr8, a)') 'a) "-microwave" (Default)'
+                write(unit= *, fmt= '(tr8, a)') 'b) "-optical"'
                         
                 write(unit= *, fmt= '(/, tr4, a)') 'Options for trp-file creation:'
                 write(unit= *, fmt= '(tr8, a)') 'a) "-trp" (Default)'
@@ -424,6 +453,7 @@ program RADIATE_Fortran_start
     
     ! call the subroutine *RayTrace_main* to do the ray-tracing processing
     call RayTrace_main_global( parameters )
+    
     
     
 end program RADIATE_Fortran_start

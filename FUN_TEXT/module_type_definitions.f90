@@ -57,6 +57,9 @@
 ! 05.02.2018: epolog % raytrace is not globally stored anymore because it requires huge disk space and is not
 !             needed outside of the get_RayTrace2D_* subroutines
 !
+! Changes by Janina Boisits:
+! 08.03.2018: add variable 'wavelength' to parameters_type
+!
 !****************************************************************************
     
 module module_type_definitions
@@ -143,6 +146,9 @@ module module_type_definitions
         
         ! specifying path to file with data for the individual azel creation
         character(len=:), allocatable :: load_path_filename_indAzelSpec
+        
+        ! vertical interpolation method
+        character(len=:), allocatable  :: wavelength
         
     end type parameters_type
     
