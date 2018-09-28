@@ -30,10 +30,10 @@ The resulting folder structure should look the following:
 ```mermaid
 graph LR;
 VieVSsource --> RADIATE;
-VieVSsource --> (other VieVS modules ...);
+VieVSsource --> other VieVS modules ...;
 ```
 
 
 ## Further information
 
-You can find more detailed information on how to run RADIATE at [http://vievswiki.geo.tuwien.ac.at/doku.php?id=internal:vievs_raytracer&s[]=radiate] (http://vievswiki.geo.tuwien.ac.at/doku.php?id=internal:vievs_raytracer&s[]=radiate).
+You can find more detailed information on how to run RADIATE in the [VieVS Wiki] (http://vievswiki.geo.tuwien.ac.at/doku.php?id=internal:vievs_raytracer&s[]=radiate).
