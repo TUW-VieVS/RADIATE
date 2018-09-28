@@ -30,7 +30,6 @@ The resulting folder structure should look the following:
 ```mermaid
 graph LR;
 VieVSsource --> RADIATE;
-VieVSsource --> other VieVS modules ...;
 ```
 
 
