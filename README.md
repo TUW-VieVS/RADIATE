@@ -41,5 +41,44 @@ In the following, there is a step-by-step description of how to create ray-trace
 7. The results of the ray-tracing are stored in *RESULTS/*.
 
 
+### Input arguments to the ray-tracer ###
+
+Following the command which runs the executable file `./radiate`, a set of input arguments must be passed over the command line, the first two of which are mandatory. If no further input arguments are specified, the default settings of each are applied. The first argument must be the session name and the second argument must be the station coordinates file, while the order in which the optional input arguments are placed is negligible.
+
+1. Name of azel-file of the session which shall be processed in the format *azel_yyyymmddhh_UNI.txt*, e.g. `azel_2014071200_UNI.txt`
+2. Name of the respective station coordinates file:
+   - `vlbi.ell`: containing the ellipsoidal coordinates of all VLBI stations (~240)
+   - `slr.ell`: containing the ellipsoidal coordinates of SLR stations (~170)
+   - `gnss.ell`: containing the ellipsoidal coordinates of most IGS stations (~460)
+    
+- Method for the vertical interpolation of the meteorological data:
+  - `-profilewise` (default)
+  - `-gridwise`
+- Ray-tracing method (approach for defining intersection points and delays):
+  - `-pwl` (default)
+  - `-ref_pwl` (only realized in the MATLAB version!)
+  - `-Thayer` (only realized in the MATLAB version!)
+- Wavelength of observations (choose between ray-tracing for microwave or for optical techniques):
+  - `-microwave` (default)
+  - `-optical` (implemented wavelength: 532nm)
+- Time interpolation method (mode of assigning the observations to epochs):
+  - `-one_epoch_per_obs`: each observation is assigned to only that grib-file epoch which it is closest to the observation
+  - `-two_epochs_per_obs` (default): each observation is assigned to the two surrounding grib-file epochs, and is linearly interpolated from them. This approach is indeed more precise, however it demands double calculation time. Note: if an observation is exactly at a NWM epoch, the ray-tracing is still carried out for the neigboring NWM as well, although the second epolog entry will not alter the time interpolation result.
+- Specify whether a .trp file shall be created and saved to *RESULTS/* in addition to the standardly produced .radiate file:
+  - `-trp` (default)
+  - `-notrp`
+- Specify whether the error log shall be saved to // DATA/ERROR_LOG //:
+  - `-errorlog` (default)
+  - `-noerrorlog`
+- Specify whether the produced session index- and epolog-files shall be cleaned up at the end:
+  - `-cleanup`
+  - `-nocleanup` (default)
+- Specify how sessions are evaluated:
+  - `-readAzel` (default): the input settings (stations, azimuths, elevations) for the ray-tracing of the respective session have to be stored in an .azel file, containing a line for every single observation. The .azel file must be stored in *DATA/AZEL/*. For all the observations contained in it, ray-traced delays will be produced.
+  - `-createUniAzel`: in case ray-traced delays for uniformly distributed azimuths and constant elevations are desired, a further option is possible. The input settings (number of uniformly distributed azimuths, list of elevations) have to be specified in *DATA/INPUT/azel_spec.txt*. Thus, a virtual .azel file is created internally (without being saved as a .txt. file) for all stations from the selected station coordinates file. This means that no .azel file is required in*DATA/AZEL/*.
+
+
+
+
 
 
