@@ -50,6 +50,9 @@ Following the command which runs the executable file `./radiate`, a set of input
    - `vlbi.ell`: containing the ellipsoidal coordinates of all VLBI stations (~240)
    - `slr.ell`: containing the ellipsoidal coordinates of SLR stations (~170)
    - `gnss.ell`: containing the ellipsoidal coordinates of most IGS stations (~460)
+   - `doris.ell`: containing the ellipsoidal coordinates of all DORIS stations (~200)
+   - `gridpoint_coord_5x5`: containing the ellipsoidal coordinates of all grid points of a global 5°x5° grid (2592)
+   - `gridpoint_coord_1x1`: containing the ellipsoidal coordinates of all grid points of a global 1°x1° grid (64800)
     
 - Method for the vertical interpolation of the meteorological data:
   - `-profilewise` (default)
