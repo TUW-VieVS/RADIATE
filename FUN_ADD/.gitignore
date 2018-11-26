@@ -1,0 +1,11 @@
+x64/
+.vs/
+*.db
+*.vfproj
+*.sln
+*.u2d
+*.user
+
+!.gitignore
+!.f90
+!.txt
