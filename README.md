@@ -1,4 +1,3 @@
-
 # RADIATE
 
 RADIATE is a ray-tracing software written in Fortran. Ray-traced delays can be calculated for observations in the microwave as well as in the optical frequency range. The computation is based on numerical weather models and the output files contain several tropospheric parameters
@@ -6,7 +5,7 @@ RADIATE is a ray-tracing software written in Fortran. Ray-traced delays can be c
 
 ## Software requirements
 
-RADIATE is a Linux command line software and, hence,  is to be operated on a Linux machine. To compile the software, 'gfortran 5 compiler' (or newer version) needs to be installed.
+RADIATE is a Fortran-written software to run from Linux command line (Terminal). To compile the software, the 'gfortran 5 compiler' (or newer version) needs to be installed.
 
 
 ## Dependencies
@@ -22,7 +21,7 @@ For installation the following steps are required:
 
 ```
 $ cd your_directory/VieVSsource
-$ git@git.geo.tuwien.ac.at:vievs/RADIATE/RADIATE.git
+$ git clone git@git.geo.tuwien.ac.at:vievs/RADIATE/RADIATE.git
 ```
 
 The resulting folder structure should look the following:
