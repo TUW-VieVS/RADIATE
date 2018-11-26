@@ -25,12 +25,7 @@ $ cd your_directory/VieVSsource
 $ git clone https://github.com/TUW-VieVS/RADIATE.git
 ```
 
-The resulting folder structure should look the following:
 
-```mermaid
-graph LR;
-VieVSsource --> RADIATE;
-```
 
 
 ## Further information
