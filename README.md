@@ -67,7 +67,7 @@ Following the command which runs the executable file `./radiate`, a set of input
 - Specify whether a .trp file shall be created and saved to *RESULTS/* in addition to the standardly produced .radiate file:
   - `-trp` (default)
   - `-notrp`
-- Specify whether the error log shall be saved to // DATA/ERROR_LOG //:
+- Specify whether the error log shall be saved to *DATA/ERROR_LOG*:
   - `-errorlog` (default)
   - `-noerrorlog`
 - Specify whether the produced session index- and epolog-files shall be cleaned up at the end:
