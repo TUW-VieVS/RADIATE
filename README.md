@@ -6,7 +6,7 @@ RADIATE is a ray-tracing software written in Fortran. Ray-traced delays can be c
 
 ## Software requirements
 
-RADIATE is run from the Linux command line (Terminal). To compile the software, 'gfortran 5 compiler' (or newer version) needs to be installed.
+RADIATE is run from the Linux command line (Terminal). To compile the software, the *gfortran 5 compiler* (or newer version) needs to be installed.
 
 
 ## Dependencies
