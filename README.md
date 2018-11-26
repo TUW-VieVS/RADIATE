@@ -22,7 +22,7 @@ For installation the following steps are required:
 
 ```
 $ cd your_directory/VieVSsource
-$ git@git.geo.tuwien.ac.at:vievs/RADIATE/RADIATE.git
+$ git clone git@git.geo.tuwien.ac.at:vievs/RADIATE/RADIATE.git
 ```
 
 The resulting folder structure should look the following:
