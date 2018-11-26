@@ -17,11 +17,11 @@ RADIATE is an independent software package of VieVS.
 ## Installation
 
 For installation the following steps are required:
-* Create a directory, for example 'VieVSsource'
+* Create a directory, for example 'RADIATE'
 * Clone the VieVS module RADIATE into the new directory using
 
 ```
-$ cd your_directory/VieVSsource
+$ cd RADIATE
 $ git clone https://github.com/TUW-VieVS/RADIATE.git
 ```
 
