@@ -80,7 +80,7 @@ Following the command which runs the executable file `./radiate`, a set of input
   
 ### Required format of the NWM in text format ###
 
-The VieVS ray-tracer requires the input text files containing the NWM information to follow a strict formatting. In the following, this format is described. In the directory //DATA/GRIB/sample//, there are some example NWMs in the required text format. Please mind that these files may be too large to be opened with standard text editors like Notepad, Wordpad or Notepad++! You may want to use a powerful text viewer such as [[https://www.ghisler.com/lister/|Lister]] for this purpose.
+The VieVS ray-tracer requires the input text files containing the NWM information to follow a strict formatting. In the following, this format is described. In the directory //DATA/GRIB/sample//, there are some example NWMs in the required text format. Please mind that these files may be too large to be opened with standard text editors like Notepad, Wordpad or Notepad++! You may want to use a powerful text viewer such as [lister](https://www.ghisler.com/lister/) for this purpose.
 
 The resolution of the Numerical Weather Models MUST be 1°x1° in the horizontal and 25 pressure levels in the vertical. The 3 quantities which are of interest are:
 - geopotential height Z [m]
@@ -101,6 +101,26 @@ The resolution of the Numerical Weather Models MUST be 1°x1° in the horizontal
 In total 75 lines, each value in the format: value (number of pressure level, latitude, longitude), with pressure level #1 being the highest pressure level (in most cases 1 hPa).
 
 ![grib_txt file](https://user-images.githubusercontent.com/45286008/49023114-bb073400-f196-11e8-8788-42924bf7085f.PNG)
+
+
+
+### How to bring ECMWF NWMs into text format ###
+
+In general, all kinds of NWMs can be converted into the text format described in the section above. At TU Wien, we download NWM data from the European Center for Medium-range Weather Forecasts (ECMWF), which comes in so-called .grib format. However, as this .grib files are not publicly available, we cannot distribute them, which is why all the steps written on this page are necessary in order to perform the ray-tracing.
+
+In case of ECMWF data, we create the .grib files online for the specified height levels, latitudes and longitudes and the meteorological parameters geopotential height, specific humidity and temperature. With the ECMWF-owned Fortran tool *ecCodes* we decipher the binary .grib file and use the internal function `grib_filter` to extract the data columns and write them into the text file using Bash. In case you wish to have a detailed description of how to decipher .grib files from ECMWF, please contact us by email.
+
+
+
+### Troubleshooting ###
+
+In particular the compilation part is prone to errors. In the following, there is a (incomplete) list of possible error sources, depending on whether the error happened during the compilation, or during the actual ray-tracing.
+
+- Errors during the compilation:
+  - Running the compilation batch file *creategf5* does not work, consequently no executable file is produced, but no error message is displayed in the command line: comment out the first line in *creategf5*, saying `scl enable devtoolset-4 bash`. Most likely you will have to execute this command alone in the command line. 
+   - Running the compilation batch file *creategf5* does not work, and loads of errors are displayed in the command line, saying that a certain .mod file is missing: apparently there is any defective .mod file in the folder. Delete all .mod files by typing `rm *.mod` into the command line, and then execute *creategf5* at least twice. A set of further error messages will appear, but in the end the compilation should work without any problems.
+- Errors during the ray-tracing:
+  - In case a certain input argument to the ray-tracer is wrong or missing, the output of the ray-tracer to the command window is generally self-explaining.
 
 
 
