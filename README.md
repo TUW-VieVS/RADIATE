@@ -87,7 +87,7 @@ The resolution of the Numerical Weather Models MUST be 1°x1° in the horizontal
 - specific humidity Q 
 - temperature T [K]
 
-#### Header Lines: ####
+##### Header Lines: #####
 1. `181 360`: number of latitudes, number of longitudes (hardcoded!)
 2. `90.0000000 -90.0000000`: first and last latitudes (hardcoded!)
 3. `0.00000000 359.000000`: first and last longitudes (hardcoded!)
@@ -97,7 +97,7 @@ The resolution of the Numerical Weather Models MUST be 1°x1° in the horizontal
 7. `3`: number of parameters (hardcoded!)
 8. `yyyy mm dd hh mm ss ii`: date of the NWM; *ii* represents the forecast step, but it can contain any number
 
-#### Data lines: ####
+##### Data lines: #####
 In total 75 lines, each value in the format: value (number of pressure level, latitude, longitude), with pressure level #1 being the highest pressure level (in most cases 1 hPa).
 
 ![grib_txt file](https://user-images.githubusercontent.com/45286008/49023114-bb073400-f196-11e8-8788-42924bf7085f.PNG)
@@ -121,6 +121,17 @@ In particular the compilation part is prone to errors. In the following, there i
    - Running the compilation batch file *creategf5* does not work, and loads of errors are displayed in the command line, saying that a certain .mod file is missing: apparently there is any defective .mod file in the folder. Delete all .mod files by typing `rm *.mod` into the command line, and then execute *creategf5* at least twice. A set of further error messages will appear, but in the end the compilation should work without any problems.
 - Errors during the ray-tracing:
   - In case a certain input argument to the ray-tracer is wrong or missing, the output of the ray-tracer to the command window is generally self-explaining.
+  
+  
+  
+  ### Important hints for compilation with gfortran ###
+
+- A line must not be longer than 132 letters, otherwise it will be truncated. This can be prevented if the flag `-ffree-line-length-none` is used in the compilation following the `gfortran` command.
+- Numeric values in types (= structures) which shall get the value 0, must be initialized with this value. In Microsoft VS (with Intel Fortran Compiler) this is not necessary, however in gfortran it is mandatory.
+- Divisions by 0 do not yield NaN as in Microsoft VS, but an error.
+- To all real or double precision numbers, *d0* MUST be appended.
+- Logical comparisons must be *.eqv.* instead of *==*.
+
 
 
 
