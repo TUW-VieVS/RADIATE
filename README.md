@@ -29,7 +29,7 @@ $ git clone https://github.com/TUW-VieVS/RADIATE.git
 
 ## Use the VieVS ray-tracer ##
 
-The Fortran version of the VieVS ray-tracer is to be operated from the Linux command line (Terminal). The procedure is generally divided into two parts: the compilation and the actual ray-tracing. For compilation, the "gfortran 5 compiler" or higher must be installed. On most modern Linux systems this is installed by default. If not, it can be downloaded [[https://gcc.gnu.org/wiki/GFortran|here]]. Apart from the command line, the ray-tracer can also be run from Windows using an IDE like e.g. Microsoft Visual Studio together with the Intel Fortran Compiler. This makes adapting the script much more comfortable. However, for operational purposes the use of gfortran is recommended due to higher computational speed.
+The Fortran version of the VieVS ray-tracer is to be operated from the Linux command line (Terminal). The procedure is generally divided into two parts: the compilation and the actual ray-tracing. For compilation, the "gfortran 5 compiler" or higher must be installed. On most modern Linux systems this is installed by default. If not, it can be downloaded [here](https://gcc.gnu.org/wiki/GFortran). Apart from the command line, the ray-tracer can also be run from Windows using an IDE like e.g. Microsoft Visual Studio together with the Intel Fortran Compiler. This makes adapting the script much more comfortable. However, for operational purposes the use of gfortran is recommended due to higher computational speed.
 
 In the following, there are directions on how to download, install and use the ray-tracer.
 
