@@ -78,7 +78,7 @@ Following the command which runs the executable file `./radiate`, a set of input
   - `-createUniAzel`: in case ray-traced delays for uniformly distributed azimuths and constant elevations are desired, a further option is possible. The input settings (number of uniformly distributed azimuths, list of elevations) have to be specified in *DATA/INPUT/azel_spec.txt*. Thus, a virtual .azel file is created internally (without being saved as a .txt. file) for all stations from the selected station coordinates file. This means that no .azel file is required in*DATA/AZEL/*.
 
 
-
+![grib_txt file](https://user-images.githubusercontent.com/45286008/49023114-bb073400-f196-11e8-8788-42924bf7085f.PNG)
 
 
 
