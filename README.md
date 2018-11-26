@@ -76,7 +76,29 @@ Following the command which runs the executable file `./radiate`, a set of input
 - Specify how sessions are evaluated:
   - `-readAzel` (default): the input settings (stations, azimuths, elevations) for the ray-tracing of the respective session have to be stored in an .azel file, containing a line for every single observation. The .azel file must be stored in *DATA/AZEL/*. For all the observations contained in it, ray-traced delays will be produced.
   - `-createUniAzel`: in case ray-traced delays for uniformly distributed azimuths and constant elevations are desired, a further option is possible. The input settings (number of uniformly distributed azimuths, list of elevations) have to be specified in *DATA/INPUT/azel_spec.txt*. Thus, a virtual .azel file is created internally (without being saved as a .txt. file) for all stations from the selected station coordinates file. This means that no .azel file is required in*DATA/AZEL/*.
+  
+  
+### Required format of the NWM in text format ###
 
+The VieVS ray-tracer requires the input text files containing the NWM information to follow a strict formatting. In the following, this format is described. In the directory //DATA/GRIB/sample//, there are some example NWMs in the required text format. Please mind that these files may be too large to be opened with standard text editors like Notepad, Wordpad or Notepad++! You may want to use a powerful text viewer such as [[https://www.ghisler.com/lister/|Lister]] for this purpose.
+
+The resolution of the Numerical Weather Models MUST be 1°x1° in the horizontal and 25 pressure levels in the vertical. The 3 quantities which are of interest are:
+- geopotential height Z [m]
+- specific humidity Q 
+- temperature T [K]
+
+#### Header Lines: ####
+1. `181 360`: number of latitudes, number of longitudes (hardcoded!)
+2. `90.0000000 -90.0000000`: first and last latitudes (hardcoded!)
+3. `0.00000000 359.000000`: first and last longitudes (hardcoded!)
+4. `1.00000000 1.00000000`: interval of longitudes, interval of latitudes (hardcoded!)
+5. `25`: number of pressure levels (hardcoded!)
+6. list of pressure levels in [hPa], starting with the top pressure level and ending with the bottom pressure level
+7. `3`: number of parameters (hardcoded!)
+8. `yyyy mm dd hh mm ss ii`: date of the NWM; *ii* represents the forecast step, but it can contain any number
+
+#### Data lines: ####
+In total 75 lines, each value in the format: value (number of pressure level, latitude, longitude), with pressure level #1 being the highest pressure level (in most cases 1 hPa).
 
 ![grib_txt file](https://user-images.githubusercontent.com/45286008/49023114-bb073400-f196-11e8-8788-42924bf7085f.PNG)
 
