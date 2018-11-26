@@ -134,4 +134,11 @@ In particular the compilation part is prone to errors. In the following, there i
 
 
 
+### Documented problems of the ray-tracer ###
+
+- in very very rare cases (in 4 of >16000 VLBI sessions in total), but e.g. in session *azel_03JUL16XF.txt* at station CHICHI10, the ray-tracer produces an error. More precisely, in line 541 of module_getRayTrace2D_pwl_global.f90 at some point the location dependent elevation angle *theta* gets *NaN*, perhaps because for some reason the underlying refractivities change too rapidly within the height levels. So far it could not be found out why exactly this is happening, even less how to solve it.
+
+
+
+
 
