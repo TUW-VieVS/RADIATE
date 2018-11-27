@@ -1,0 +1,8 @@
+azel_2018070100_UNI.txt
+azel_2018070106_UNI.txt
+azel_2018070112_UNI.txt
+azel_2018070118_UNI.txt
+azel_2018070200_UNI.txt
+azel_2018070206_UNI.txt
+azel_2018070212_UNI.txt
+azel_2018070218_UNI.txt
