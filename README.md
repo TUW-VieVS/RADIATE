@@ -33,7 +33,8 @@ The Fortran version of the VieVS ray-tracer is to be operated from the Linux com
 
 In the following, there is a step-by-step description of how to create ray-traced delays.  
 1. Before calculation, the Numerical Weather Models (NWM) in text format of all desired epochs must be stored in *DATA/GRIB/* without subdirectories. These text files have to strictly follow a formatting, which is described in the section "Required format of the NWM text files" below. We are aware that the creation of these text format NWMs might be the major challenge for successful usage of the ray-tracer.
-Please mind that these NWMs must be in 1°x1° horizontal resolution and 25 pressure levels vertical resolution covering the whole globe!
+
+Please mind that these NWMs must be in 1°x1° horizontal resolution and 25 pressure levels vertical resolution, covering the whole globe!
 2. Open a Terminal window and navigate to the directory *FUN_TEXT/*, where all required functions of the ray-tracer are stored. These functions read the text-file versions of the NWM.
 3. As a first step of the ray-tracing, an executable file has to be created, that is, all scripts have to be compiled. This is handled through a batch file, in which the compilation command is placed twice. To execute the batch file, type `./creategf5`. This will produce the executable file *radiate*.
 4. Now the actual ray-tracing is executed. There are several options to accomplish this, which are listed in the section "Input arguments to the ray-tracer". It is possible to perform the ray-tracing either for single sessions, or for a number of sessions at once. All sessions are referenced through their respective azel filename:
