@@ -36,10 +36,10 @@ In the following, there is a step-by-step description of how to create ray-trace
    - the Numerical Weather Models (NWM) in text format of all desired epochs must be stored in *DATA/GRIB/* without subdirectories. These text files have to strictly follow a formatting, which is described in the section "Required format of the NWM text files" below. Please mind that these NWMs must be in 1°x1° horizontal resolution and 25 pressure levels vertical resolution, covering the whole globe! We are aware that the creation of these text format NWMs might be the major challenge for successful usage of the ray-tracer.
    - the azel files (from AZimuth and ELevation), containing the specifications for the observations which shall be ray-traced, have to be stored in *DATA/AZEL/* without subdirectories. See Section "Required format of the azel files" for the exact syntax. When performing ray-tracing for uniformly distributed azimuths (see option *-creatUniAzel* in Section "Input arguments to the ray-tracer"), however, the azel-files will be created automatically by RADIATE and therefore do not have to be available beforehand.
 2. Open a Terminal window and navigate to the directory *FUN_TEXT/*, where all required functions of the ray-tracer are stored. These functions read the text-file versions of the NWM.
-3. As a first step of the ray-tracing, all scripts have to be compiled, that is, an executable file is created. This is handled through a batch file, in which the compilation command is placed twice. To execute the batch file, type `./creategf5`. This will produce the executable file *radiate*.
+3. As a first step of the ray-tracing, all scripts have to be compiled, that is, an executable file is created. This is handled through a batch file, in which the compilation command is placed twice. To execute the batch file, type `./compile_RADIATE.sh`. This will produce the executable file *radiate*.
 4. Now the actual ray-tracing is executed. There are several options to accomplish this, which are listed in the section "Input arguments to the ray-tracer". It is possible to perform the ray-tracing either for single sessions, or for a number of sessions at once. All sessions are referenced through their respective azel filename.
    - Single sessions: Type `./radiate azel_yyyymmddhh_UNI.txt stations_file.ell`. The specification of the session name and the station coordinates file is the minimum requirement, all other options will get their default values. If further options are to be specified, they have to be appended following a blank.
-   - Multiple sessions: In order to evaluate multiple sessions at once, batch files have to be created. One such batch file is `./domore`, which evaluates all sessions for which azel files are available in *DATA/AZEL/*. Data in subdirectories is not considered. Changes in the input options to the ray-tracer have to be done inside the batch file. 
+   - Multiple sessions: In order to evaluate multiple sessions at once, batch files have to be created. One such batch file is `./run_multiple_sessions.sh`, which evaluates all sessions for which azel files are available in *DATA/AZEL/*. Data in subdirectories is not considered. Changes in the input options to the ray-tracer have to be done inside the batch file. 
 5. The results of the ray-tracing are stored in *RESULTS/*.
 
 
@@ -137,7 +137,7 @@ Azel files contain all specifications for the observations to be ray-traced. Dep
   13. pressure at the site [hPa] (can also be set to NaN, if not available)
   14. water vapor pressure at the site [hPa] (can also be set to NaN, if not available)
 
-- If the optional input argument `-createUniAzel` is set, then Azel files do not need to be created manually. Otherwise, however, the ray-tracing is
+- If the optional input argument `-createUniAzel` is set, then Azel files do not need to be created manually. Instead, the azel files are created by RADIATE internally (without writing them to any location) following the specifications in *DATA/INPUT/AZEL_spec.txt*
 
 
 
