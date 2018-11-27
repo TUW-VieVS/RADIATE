@@ -79,8 +79,8 @@ The executable file is run by the command `./radiate` from the command line. Thi
   - `-cleanup`
   - `-nocleanup` (default)
 - Specify how sessions are evaluated:
-  - `-readAzel` (default): the input settings (stations, azimuths, elevations) for the ray-tracing of the respective session have to be stored in an .azel file, containing a line for every single observation. The .azel file must be stored in *DATA/AZEL/*. For all the observations contained in it, ray-traced delays will be produced.
-  - `-createUniAzel`: in case ray-traced delays for uniformly distributed azimuths and constant elevations are desired, a further option is possible. The input settings (number of uniformly distributed azimuths, list of elevations) have to be specified in *DATA/INPUT/azel_spec.txt*. Thus, a virtual .azel file is created internally (without being saved as a .txt. file) for all stations from the selected station coordinates file. This means that no .azel file is required in *DATA/AZEL/*.
+  - `-readAzel` (default): the input settings (stations, azimuths, elevations) for the ray-tracing of the respective session have to be stored in an .azel file, containing a line for every single observation. The azel file(s) must be stored in *DATA/AZEL/*. For all the observations contained in it, ray-traced delays will be produced. See Section "Required format of the azel files" for the syntax of azel files.
+  - `-createUniAzel`: in case ray-traced delays for uniformly distributed azimuths and constant elevations are desired, a further option is possible. The input settings (number of uniformly distributed azimuths, list of elevations) have to be specified in *DATA/INPUT/azel_spec.txt*. Thus, a virtual .azel file is created internally (without being saved as a .txt. file) for all stations from the selected station coordinates file. This means that no .azel file is required in *DATA/AZEL/*. See Section "Required format of the azel files" for the syntax of *azel_spec.txt*.
   
   
 ### Required format of the NWM text files ###
@@ -116,9 +116,28 @@ In general, all kinds of NWMs can be converted into the text format described in
 In case of ECMWF data, we create the .grib files online for the specified height levels, latitudes and longitudes and the meteorological parameters geopotential height, specific humidity and temperature. With the ECMWF-owned Fortran tool *ecCodes* we decipher the binary .grib file and use the internal function `grib_filter` to extract the data columns and write them into the text file using Bash. In case you wish to have a detailed description of how to decipher .grib files from ECMWF, please contact us by email.
 
 
+
 ### Required format of the azel files ###
 
-|||
+Azel files contain all specifications for the observations to be ray-traced. Depending on the optional input arguments, azel files either have to created manually or they are computed automatically (and internally). 
+
+- If the optional input argument `-readAzel` is set (also set by default), then the ray-tracer expects the respective azel file to be stored in 'DATA/AZEL/'. Every line of an azel file specifies one observation, yielding one ray-traced delay in further consequence. Azel files have to consist of the following columns:
+  1. scannumber (can also be set to any number)
+  2. modified Julian date (including decimal places; must not contradict with the other date specifications!)
+  3. year (must not contradict with the modified Julian date!)
+  4. day of year (must not contradict with the other data specifications!)
+  5. hour (must not contradict with the modified Julian date!)
+  6. min (must not contradict with the modified Julian date!)
+  7. sec (must not contradict with the modified Julian date!)
+  8. station name
+  9. azimuth [rad]
+  10. elevation [rad]
+  11. source (either VLBI quasar or GNSS satellite; can also be set to 'none')
+  12. temperature at the site [°C] (can also be set to NaN, if not available)
+  13. pressure at the site [hPa] (can also be set to NaN, if not available)
+  14. water vapor pressure at the site [hPa] (can also be set to NaN, if not available)
+
+- If the optional input argument `-createUniAzel` is set, then Azel files do not need to be created manually. Otherwise, however, the ray-tracing is
 
 
 
