@@ -34,7 +34,7 @@ The Fortran version of the VieVS ray-tracer is to be operated from the Linux com
 In the following, there is a step-by-step description of how to create ray-traced delays.  
 1. Before calculation, the following data must be available:
    - the Numerical Weather Models (NWM) in text format of all desired epochs must be stored in *DATA/GRIB/* without subdirectories. These text files have to strictly follow a formatting, which is described in the section "Required format of the NWM text files" below. Please mind that these NWMs must be in 1°x1° horizontal resolution and 25 pressure levels vertical resolution, covering the whole globe! We are aware that the creation of these text format NWMs might be the major challenge for successful usage of the ray-tracer.
-   - the azel files (from AZimuth and ELevation), containing the specifications for the observations which shall be ray-traced, have to be stored in *DATA/AZEL/* without subdirectories. When performing ray-tracing for uniformly distributed azimuths (see option *-creatUniAzel* in Section "Input arguments to the ray-tracer"), however, the azel-files will be created automatically by RADIATE and therefore do not have to be available beforehand.
+   - the azel files (from AZimuth and ELevation), containing the specifications for the observations which shall be ray-traced, have to be stored in *DATA/AZEL/* without subdirectories. See Section "Required format of the azel files" for the exact syntax. When performing ray-tracing for uniformly distributed azimuths (see option *-creatUniAzel* in Section "Input arguments to the ray-tracer"), however, the azel-files will be created automatically by RADIATE and therefore do not have to be available beforehand.
 2. Open a Terminal window and navigate to the directory *FUN_TEXT/*, where all required functions of the ray-tracer are stored. These functions read the text-file versions of the NWM.
 3. As a first step of the ray-tracing, all scripts have to be compiled, that is, an executable file is created. This is handled through a batch file, in which the compilation command is placed twice. To execute the batch file, type `./creategf5`. This will produce the executable file *radiate*.
 4. Now the actual ray-tracing is executed. There are several options to accomplish this, which are listed in the section "Input arguments to the ray-tracer". It is possible to perform the ray-tracing either for single sessions, or for a number of sessions at once. All sessions are referenced through their respective azel filename.
@@ -45,7 +45,7 @@ In the following, there is a step-by-step description of how to create ray-trace
 
 ### Input arguments to the ray-tracer ###
 
-The executable file is run by the command `./radiate` from the command line. This command must be followed by a set of input arguments, the first two of which are mandatory. If no further input arguments are specified, the default settings of each are applied. The first mandatory input argument is the azel file (defining the session name), whereas the second mandatory input argument is the station coordinates file. The order of the subsequent optional input arguments is arbitrary.
+The executable file is run by the command `./radiate` from the command line. This command must be followed by a set of input arguments, the first two of which are mandatory. The first mandatory input argument is the azel file (defining the session name), whereas the second mandatory input argument is the station coordinates file. The order of the subsequent optional input arguments is arbitrary. If no optional input arguments are specified, the default settings of each will be applied.
 
 1. Name of azel-file of the session which shall be processed in the format *azel_yyyymmddhh_UNI.txt*, e.g. `azel_2014071200_UNI.txt`
 2. Name of the respective station coordinates file:
@@ -116,6 +116,11 @@ In general, all kinds of NWMs can be converted into the text format described in
 In case of ECMWF data, we create the .grib files online for the specified height levels, latitudes and longitudes and the meteorological parameters geopotential height, specific humidity and temperature. With the ECMWF-owned Fortran tool *ecCodes* we decipher the binary .grib file and use the internal function `grib_filter` to extract the data columns and write them into the text file using Bash. In case you wish to have a detailed description of how to decipher .grib files from ECMWF, please contact us by email.
 
 
+### Required format of the azel files ###
+
+|||
+
+
 
 ### Troubleshooting ###
 
@@ -129,7 +134,7 @@ In particular the compilation part is prone to errors. In the following, there i
   
   
   
-  ### Important hints for compilation with gfortran ###
+### Important hints for compilation with gfortran ###
 
 - A line must not be longer than 132 letters, otherwise it will be truncated. This can be prevented if the flag `-ffree-line-length-none` is used in the compilation following the `gfortran` command.
 - Numeric values in types (= structures) which shall get the value 0, must be initialized with this value. In Microsoft VS (with Intel Fortran Compiler) this is not necessary, however in gfortran it is mandatory.
