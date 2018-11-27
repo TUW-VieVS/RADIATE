@@ -1,4 +1,4 @@
-# loop through all files
+# loop through all files in /DATA/AZEL/
 for file in `ls ../DATA/AZEL/azel_*.txt | xargs -n1 basename`
 do
 
