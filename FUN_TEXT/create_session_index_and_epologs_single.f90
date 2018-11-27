@@ -465,7 +465,7 @@ subroutine create_session_index_and_epologs_single( load_path_azel, &
         print '(a, a, a, a, a/)', 'The uniform azel file ',load_filename_azel,' is created internally using the specifications in ', load_path_filename_indAzelSpec , '.'
         
         ! Open the file
-        open(unit= file_unit_azel_spec, file= load_path_filename_indAzelSpec,       action= 'read', status= 'old', iostat= open_status)
+        open(unit= file_unit_azel_spec, file= load_path_filename_indAzelSpec, action= 'read', status= 'old', iostat= open_status)
         ! Check if textfile can be opened (iostat == 0 --> no error)
         if (open_status == 0) then
             
