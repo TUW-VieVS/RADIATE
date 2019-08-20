@@ -441,7 +441,11 @@ program RADIATE_Fortran_start
     parameters % load_path_undulation='../DATA/UNDULATIONS/';
     
     ! define path and filename of the textfile containing the specifications for the uniform azel file creation
-    parameters % load_path_filename_indAzelSpec= '../DATA/INPUT/AZEL_spec.txt'
+	if ( parameters % load_filename_stat_info == 'slr.ell' ) then
+        parameters % load_path_filename_indAzelSpec= '../DATA/INPUT/AZEL_spec_SLR.txt'
+	else
+		parameters % load_path_filename_indAzelSpec= '../DATA/INPUT/AZEL_spec.txt'
+	end if
     
     
     !***************************************************************************************************
