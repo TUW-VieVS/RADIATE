@@ -6,7 +6,7 @@ x64/
 *.u2d
 *.user
 *.mod
-radaite
+radiate
 
 !.gitignore
 !.f90
