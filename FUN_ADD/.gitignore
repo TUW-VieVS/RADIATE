@@ -5,6 +5,7 @@ x64/
 *.sln
 *.u2d
 *.user
+azel_list
 
 !.gitignore
 !.f90

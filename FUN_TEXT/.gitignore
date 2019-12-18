@@ -5,6 +5,8 @@ x64/
 *.sln
 *.u2d
 *.user
+*.mod
+radaite
 
 !.gitignore
 !.f90
