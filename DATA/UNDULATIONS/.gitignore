@@ -1,0 +1,5 @@
+global_undulations_dint_lat0.125_dint_lon0.125.txt
+
+!.gitignore
+!*.txt
+!*.zip
