@@ -43,6 +43,8 @@ $ cd RADIATE
 $ git clone https://github.com/TUW-VieVS/RADIATE.git
 ```
 
+After installation, unzip DATA/UNDULATIONS/global_undulations_dint_lat0.125_dint_lon0.125.txt.zip, but make sure to exclude the unzipped file from any commit!
+
 
 ## Use the VieVS ray-tracer ##
 
@@ -50,9 +52,9 @@ The Fortran version of the VieVS ray-tracer is to be operated from the Linux com
 
 In the following, there is a step-by-step description of how to create ray-traced delays.  
 1. Before calculation, the following data must be available:
-   - the Numerical Weather Models (NWM) in text format of all desired epochs must be stored in *DATA/GRIB/* without subdirectories. These text files have to strictly follow a formatting, which is described in the section "Required format of the NWM text files" below. Please mind that these NWMs must be in 1°x1° horizontal resolution and 25 pressure levels vertical resolution, covering the whole globe! We are aware that the creation of these text format NWMs might be the major challenge for successful usage of the ray-tracer.
-   - the specifications for the observations which are to be ray-traced must be available. Depending on the respective input argument (Section "Input arguments to the ray-tracer"), this means that either azel files must be stored in *DATA/AZEL/*, or the information must be available in *AZEL_spec.txt* and *AZEL_list.txt*.
-   - the station coordinate files (Section "Input arguments to the ray-tracer") can be downloaded from http://vmf.geo.tuwien.ac.at/station_coord_files/ and need to be stored in the directory DATA/STATIONS/.
+   - the Numerical Weather Models (NWM) in text format of all desired epochs must be stored in *DATA/GRIB/* without subdirectories (examples can be found in *DATA/GRIB/sample/*). These text files have to strictly follow a formatting, which is described in the section "Required format of the NWM text files" below. Please mind that these NWMs must be in 1°x1° horizontal resolution and 25 pressure levels vertical resolution, covering the whole globe! We are aware that the creation of these text format NWMs might be the major challenge for successful usage of the ray-tracer.
+   - the specifications for the observations which are to be ray-traced must be available. Depending on the respective input argument (Section "Input arguments to the ray-tracer"), this means that either azel files must be stored in *DATA/AZEL/* (see examples in *DATA/AZEL/sample/*), or the information must be available in *AZEL_spec.txt* / *AZEL_spec_SLR.txt* (for optical ray-tracing) and *AZEL_list.txt* in the *DATA/INPUT/* directory (examples and format see *DATA/INPUT/sample/*).
+   - the station coordinate files (Section "Input arguments to the ray-tracer") can be downloaded from http://vmf.geo.tuwien.ac.at/station_coord_files/ and need to be stored in the directory *DATA/STATIONS/*.
 2. Open a Terminal window and navigate to the directory *FUN_TEXT/*, where all required functions of the ray-tracer are stored. These functions read the text-file versions of the NWM.
 3. As a first step of the ray-tracing, all scripts have to be compiled, that is, an executable file is created. This is handled through a batch file, in which the compilation command is placed twice. To execute the batch file, type `./compile_RADIATE.sh`. This will produce the executable file *radiate*.
 4. Now the actual ray-tracing is executed. There are several options to accomplish this, which are listed in the section "Input arguments to the ray-tracer". It is possible to perform the ray-tracing either for single sessions, or for a number of sessions at once. All sessions are referenced through their respective azel filename.

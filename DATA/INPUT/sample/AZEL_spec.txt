@@ -1,0 +1,12 @@
+# (1) start time ('yyyy/mm/dd')
+# (2) end time ('yyyy/mm/dd')
+# (3) number of epochs per day (1, 2, 4 or 8; default: 4)
+# (4) number of uniformly distributed azimuths
+# (5) list of elevations separated by blanks, e.g. 3.3 5 10 
+#
+2018/07/01
+2018/07/02
+4
+8
+#3 5 7 10 15 30 70
+3
